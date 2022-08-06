@@ -1,0 +1,22 @@
+<template>
+    <div style="background-color:aqua">
+        <lightning-input label="Enter Employee Name" value={ename} onchange={employee}></lightning-input>
+        <lightning-input label="Enter Employee Age" value={eage}  onchange={employee}></lightning-input>
+        <lightning-input label="Enter Salary" value={esalary} onchange={employee}></lightning-input>
+        <lightning-input label="Enter Employee Location" value={elocation} onchange={employee}></lightning-input><br/><br/>
+        <lightning-button label="Add Employee Details" onclick={addEmp} variant="success"></lightning-button>
+        </div><br/><br/>
+        <lightning-button label="Show/Hide" onclick={showhide}></lightning-button>  <br/><br/>               
+       <template if:true={show}>
+            <div>
+           <template for:each={addarr} for:item="p" for:index="index">
+             <lightning-card title={p.Employeename} key={p.Employeename} style="background-color:yellow">
+                                
+                    <h3>{p.EmployeeAge}</h3><br/>
+                   <h3>{p.Employeesalary}</h3><br/>
+                   <h3>{p.Employeelocation} </h3><br/>
+                </lightning-card>
+            </template> 
+        </div>
+        </template>
+        </template>

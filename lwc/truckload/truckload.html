@@ -1,0 +1,16 @@
+<template>
+    <div style="background-color: skyblue;">
+    <lightning-card title="Truck Load Details" icon-name="custom:record">
+        <div class="slds-m-around_medium">
+            <lightning-input label="Truck load by which Person" name="name" type="text" onchange={handelChange} value={loadbywhichperson}></lightning-input>
+            <lightning-input label="Material" onchange={handelChange} name="Material" type="text" value={materia}></lightning-input>
+            <lightning-input label="Truck Booking" onchange={handelChange} name="Truck Booking" type="text" value={Scheduletime}></lightning-input>
+            <lightning-input label="Material Weight" onchange={handelChange} type="number" value={materialweight}></lightning-input>
+            <lightning-input label="Schedule Time" onchange={handelChange} type="time" value={Scheduletime} ></lightning-input><br/><br/>
+            <lightning-button label="Add Load" variant="brand" onclick={loadTruck} type="date"></lightning-button>
+
+        </div>
+
+     </lightning-card>
+    </div>    
+</template>

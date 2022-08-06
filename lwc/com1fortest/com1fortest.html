@@ -1,0 +1,16 @@
+<template>
+    <table border=2>
+     <tr><th>employeeid</th>
+        <th>employeename</th>
+        <th>employeesalary</th>
+        <th>employeedepartment</th>
+    </tr>
+    <tr for:each={prodarray} for:item='sk' key={sk.empid} >
+        <td>{sk.empid}</td>
+        <td>{sk.employeename}</td>
+        <td>{sk.employeesalary}</td>
+        <td>{sk.employeedepartment}</td>
+    </tr>
+    <tr><lightning-input label=enter name onchange={sdgh}></lightning-input></tr>
+    </table>    
+</template>

@@ -1,0 +1,32 @@
+<template>  
+  <div class="slds-box slds-theme_shade" style="background-color:orange;" >  
+    <lightning-button label="Load Iteam" onclick={showModal} variant="success" style="align-items: center;"> </lightning-button>  
+  </div>  
+  <template if:true={openModal}>  
+    <div class="slds-modal slds-fade-in-open slds-backdrop">  
+      <div class="slds-modal__container">       
+        <div class="slds-modal__header" style="background-color:yellow;">  
+          <lightning-button-icon icon-name="utility:close" alternative-text="Close this window" size="large"  
+            variant="bare-inverse" onclick={closeModal} class="slds-modal__close">  
+          </lightning-button-icon>  
+          <h1 style="background-color: red;">Welcome To my page</h1>  
+        </div>        
+        <div class="slds-modal__content slds-p-around_medium" style="background-color:green">  
+          <lightning-card title="Truck Load Details" icon-name="custom:record">
+              <div class="slds-m-around_medium" style="border: blue;background-color: aqua;">
+                  <lightning-input label="Truck load by which Person" onchange={handelChange} class="slds-m-button_x-small"></lightning-input>
+                  <lightning-input label="Material" onchange={handelChange} class="slds-m-button_x-small"></lightning-input>
+                  <lightning-input label="Material Weight" onchange={handelChange} class="slds-m-button_x-small"></lightning-input>
+                  <lightning-input label="Schedule Time" onchange={handelChange} class="slds-m-button_x-small"></lightning-input><br/><br/>
+                  <lightning-button label="Add Load" variant="brand" onclick={loadTruck}></lightning-button>    
+              </div>      
+           </lightning-card>            
+        </div>       
+        <div class="slds-modal__footer">  
+          <lightning-button icon-name="utility:close" label="close" variant=" Destructive" onclick={closeModal}>  
+          </lightning-button>  
+        </div>  
+      </div>  
+    </div>  
+  </template>  
+</template>

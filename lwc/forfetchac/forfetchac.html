@@ -1,0 +1,15 @@
+<template>
+    <div><lightning-button label="show/hide" onclick={show} variant="success"></lightning-button></div><br/>
+    <div>
+        <template if:true={showhide}>
+    <template for:each={listofdata} for:item="pk" for:index="index">       
+        <lightning-card key={pk.AccountNumber} title="Account details">  
+            {pk.Name}<br/>         
+            {pk.AccountNumber}<br/>           
+            {pk.Phone}<br/>
+            <lightning-button label="Delete" onclick={deletemar} variant="destructive" value={index}></lightning-button>
+        </lightning-card>
+    </template>
+</template>
+</div>    
+</template>
