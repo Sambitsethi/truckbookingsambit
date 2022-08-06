@@ -1,0 +1,15 @@
+<template>       
+     <div>
+     <template for:each={getdata} for:item="sk">        
+      <lightning-card key={sk.id} title={sk.Name} icon-name="custom:custom31">     
+      <div style="background-color:#add8e6" >           
+      <p  class="slds-p-horizontal_small"  style="margin-left:25px;"><lightning-formatted-rich-text label="image" value={sk.Image__c} style="height: 50px; width:50px;"></lightning-formatted-rich-text></p> 
+      <p  class="slds-p-horizontal_small"  style="margin-left:25px;"> <b style="color:green">Total Cost:-</b><b style="color:red;"> INR {sk.Cost__c}</b></p><br/><br/>
+      <p  class="slds-p-horizontal_small" style="margin-left:25px;"> <b>Total How Many Time Booked:-</b>{sk.Number_of_Time_Booked__c}<br/></p>
+      <p  class="slds-p-horizontal_small" style="margin-left:25px;">  <b>Truck take Approximate Load:-</b>tonnes {sk.truck_take_Approximate_load__c}<br></p><br/>      
+      <p  class="slds-p-horizontal_small" style="margin-left:25px;"></p><lightning-button variant="success" label="click for Booking"  onclick={callkaro} style="margin-left:50px;"></lightning-button>  </p>
+     </div>
+    </lightning-card>    
+    </template>
+    </div> 
+</template>

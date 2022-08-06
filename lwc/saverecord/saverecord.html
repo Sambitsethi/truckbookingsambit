@@ -1,0 +1,18 @@
+<template>
+    <div style="background-color: aqua;">
+    <lightning-input label="Enter Account Name" type="text" value={sk} onchange={change}></lightning-input>
+    <lightning-input label="Enter Account Number" type="text" valie={ks} onchange={change}></lightning-input>
+    <lightning-input label="Enter Phone Number" type="text" value={ss} onchange={change}></lightning-input><br/><br/>
+    <lightning-button label="Create Account" variant="success" onclick={createAccount}></lightning-button><br/>
+    <div style="background-color:greenyellow">
+        <template if:true={hide}>
+        <lightning-card>            
+            <h1 style="background-color:chocolate">Saved Data</h1>
+            Acccount Name:{accname}<br/>
+            Account Number:{accnum}<br/>
+            Phone Number:{phno}  
+        </lightning-card>
+    </template>
+    </div>
+</div>
+</template>
