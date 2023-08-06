@@ -1,0 +1,211 @@
+ public class ExhibitTabluarInputWrapper {
+        public String descriptionOfCmu{get;set;}
+        public String commercialProductionStartDate {get;set;}
+        public String generatingUnitFuelType {get;set;}
+        public String fossilemisssion {get;set;}
+        public String yearlyFossilemission {get;set;}
+        public String determineFossilemission {get;set;}
+        public String designefficncy {get;set;}
+        public String cmuCompId {get;set;}
+        public String exhibitId {get;set;}
+        public String tabularId {get;set;}
+        public String componentName {get;set;}
+    }
+    
+
+
+
+
+
+ @AuraEnabled
+    public static String createExhibitTabluarInput(List<String> exhibitTabluarWrapperLst, String cmuId, String exhibitId){
+        List<EMR_Exhibit_Tabluar_Input__c> tabRecsToDelete = new List<EMR_Exhibit_Tabluar_Input__c>();
+        tabRecsToDelete = [SELECT Id, EMR_CMU_Component__r.EMR_CMU_Identifier__c, EMR_Exhibit_Repository__c FROM EMR_Exhibit_Tabluar_Input__c WHERE EMR_Exhibit_Repository__c =: exhibitId AND EMR_CMU_Component__r.EMR_CMU_Identifier__c != :cmuId WITH SECURITY_ENFORCED];
+        if(!tabRecsToDelete.isEmpty() && EMR_Exhibit_Tabluar_Input__c.sObjectType.getDescribe().isDeletable()){
+            delete tabRecsToDelete;
+        }
+        List<EMR_Exhibit_Tabluar_Input__c> exhTabObjLst = new List<EMR_Exhibit_Tabluar_Input__c>();
+        if(exhibitTabluarWrapperLst.size()>0){
+            String zACompnentRecordTypeId= [SELECT Id FROM RecordType WHERE SobjectType = 'EMR_Exhibit_Tabluar_Input__c' AND Name='Za Fossil fuel Component' WITH SECURITY_ENFORCED].Id;
+            for(String exhibitTabluarWrapper: exhibitTabluarWrapperLst){
+                ExhibitTabluarInputWrapper wrapObj = (ExhibitTabluarInputWrapper)JSON.deserialize(exhibitTabluarWrapper, ExhibitTabluarInputWrapper.class);
+                EMR_Exhibit_Tabluar_Input__c exhTabObj = new EMR_Exhibit_Tabluar_Input__c();
+                if(wrapObj.tabularId != null && wrapObj.tabularId != ''){
+                    exhTabObj.Id = wrapObj.tabularId;
+                }else{
+                    exhTabObj.EMR_Exhibit_Repository__c = wrapObj.exhibitId;
+                }
+                exhTabObj.EMR_CMU_Component__c = wrapObj.cmuCompId;
+                exhTabObj.EMR_Fossil_Fuel_Yerly_Emissions__c = wrapObj.fossilemisssion;
+                exhTabObj.EMR_Fosil_Ful_Emissions_in_gCO2_per_kWhe__c =wrapObj.yearlyFossilemission;
+                exhTabObj.EMR_CommercialProduction_Start_Date__c =wrapObj.commercialProductionStartDate;
+                exhTabObj.EMR_Design_Efficiency_Formula__c =wrapObj.designefficncy;
+                exhTabObj.EMR_Fossil_Fuel_Formula__c =wrapObj.determineFossilemission;
+                exhTabObj.EMR_Generating_unit_fuel_type_s__c =wrapObj.generatingUnitFuelType;
+                exhTabObj.EMR_Fosil_Fuel_Component_descriptor__c =wrapObj.descriptionOfCmu;
+                exhTabObj.RecordTypeId = zACompnentRecordTypeId;
+                if(!exhTabObjLst.contains(exhTabObj)){
+                	exhTabObjLst.add(exhTabObj);
+                }
+            }
+            if(exhTabObjLst.size()>0){
+                if(EMR_Exhibit_Tabluar_Input__c.sObjectType.getDescribe().isCreateable() && EMR_Exhibit_Tabluar_Input__c.sObjectType.getDescribe().isUpdateable()) {
+                    upsert exhTabObjLst;
+                    return 'Success';
+                }
+            }
+        }
+        return 'NoSuccess';
+    }
+______________________________________________________________________________________________________________
+
+
+
+ @isTest
+    static void testTabularRecords(){
+        
+        EMR_CMU_Component__c ZaChildComp = new EMR_CMU_Component__c();
+        ZaChildComp.EMR_Description_of_the_CMU_Component__c = 'Hello';
+        ZaChildComp.EMR_Component_ID__c = '123322';
+        Insert ZaChildComp;
+        
+        EMR_Exhibit__c exhibitZA = new EMR_Exhibit__c();
+        exhibitZA.EMR_Exhibit_Title__c = 'Exhibit-ZAchild';
+        Insert exhibitZA;
+        
+        EMR_Exhibit__c exhibitZA1 = new EMR_Exhibit__c();
+        exhibitZA.EMR_Exhibit_Title__c = 'Exhibit-ZAchild1';
+        Insert exhibitZA1;
+        
+        List<String> exhibitTabluarWrapperLst = new List<String>();
+        string descriptionOfCmu;
+        string commercialProductionStartDate =ZaChildComp.EMR_Commissioned_Start_Date__c;
+        string generatingUnitFuelType;
+        string fossilemisssion;
+        string yearlyFossilemission;
+        string designefficncy;
+        string determineFossilemission;
+        string cmuId = ZaChildComp.EMR_Component_ID__c ;
+        Id zACompnentRecordTypeId = null;
+        
+        List<EMR_Exhibit_Tabluar_Input__c> exhTabObj1 = new List<EMR_Exhibit_Tabluar_Input__c>();
+        
+        EMR_Exhibit_Tabluar_Input__c exhTabObj2 = new EMR_Exhibit_Tabluar_Input__c();
+        exhTabObj2.EMR_Exhibit_Repository__c = exhibitZA1.Id;
+                 Insert exhTabObj2;
+        RecordType zARecordType = [SELECT Id FROM RecordType WHERE SobjectType = 'EMR_Exhibit_Tabluar_Input__c' AND Name = 'Za Fossil fuel Component' WITH SECURITY_ENFORCED];
+        if (zARecordType != null) {
+            zACompnentRecordTypeId = zARecordType.Id;
+        }
+        
+        exhibitTabluarWrapperLst.add('{"descriptionOfCmu":"Description 1", "commercialProductionStartDate":"Commissioned Start Date Pre 4th July 2019", "generatingUnitFuelType":"Crude Oil", "fossilemisssion":"100", "yearlyFossilemission":"100", "determineFossilemission":"Fossil Fuel Emissions Formula", "designefficncy":"Design Efficiency Formula"}');
+        
+        /*if(exhibitTabluarWrapperLst.Size()>0){*/
+            
+        EMR_Exhibit_Tabluar_Input__c exhTabObj = new EMR_Exhibit_Tabluar_Input__c();
+        exhTabObj.EMR_Exhibit_Repository__c =exhibitZA.Id;
+        exhTabObj.EMR_CMU_Component__c = ZaChildComp.Id;
+        exhTabObj.EMR_Fossil_Fuel_Yerly_Emissions__c = '100';
+        exhTabObj.EMR_Fosil_Ful_Emissions_in_gCO2_per_kWhe__c ='100';
+        exhTabObj.EMR_CommercialProduction_Start_Date__c ='Commissioned Start Date Pre 4th July 2019';
+        exhTabObj.EMR_Design_Efficiency_Formula__c ='Design Efficiency Formula';
+        exhTabObj.EMR_Fossil_Fuel_Formula__c ='Fossil Fuel Emissions Formula';
+        exhTabObj.EMR_Generating_unit_fuel_type_s__c ='Crude Oil';
+        exhTabObj.EMR_Fosil_Fuel_Component_descriptor__c ='Description 1';
+              
+                Insert exhTabObj;
+                system.debug('exhitab insert'+exhTabObj.Id);
+            
+        
+        EMR_Exhibit_Tabluar_Input__c tabExhibit =[SELECT id, name,EMR_CMU_Component__c,EMR_Fossil_Fuel_Yerly_Emissions__c,
+                                                  EMR_Fosil_Ful_Emissions_in_gCO2_per_kWhe__c,EMR_CommercialProduction_Start_Date__c,
+                                                  EMR_Design_Efficiency_Formula__c,EMR_Fossil_Fuel_Formula__c,EMR_Generating_unit_fuel_type_s__c,
+                                                  EMR_Fosil_Fuel_Component_descriptor__c,EMR_Exhibit_Repository__c
+                                                  FROM EMR_Exhibit_Tabluar_Input__c where EMR_Exhibit_Repository__c =:exhibitZA.Id];
+                   system.debug('exhitab query'+tabExhibit);
+            if (tabExhibit.Id != null){
+       // EMR_Exhibit_Tabluar_Input__c exhTab = new EMR_Exhibit_Tabluar_Input__c();
+           
+        //tabExhibit.EMR_Exhibit_Repository__c =exhibitZA.Id;
+        tabExhibit.EMR_CMU_Component__c = ZaChildComp.Id;
+        tabExhibit.EMR_Fossil_Fuel_Yerly_Emissions__c = '101';
+        tabExhibit.EMR_Fosil_Ful_Emissions_in_gCO2_per_kWhe__c ='101';
+        tabExhibit.EMR_CommercialProduction_Start_Date__c ='Commissioned Start Date Pre 4th July 2019';
+        tabExhibit.EMR_Design_Efficiency_Formula__c ='Design Efficiency Formula';
+        tabExhibit.EMR_Fossil_Fuel_Formula__c ='Fossil Fuel Emissions Formula';
+        tabExhibit.EMR_Generating_unit_fuel_type_s__c ='Crude Oil';
+        tabExhibit.EMR_Fosil_Fuel_Component_descriptor__c ='Description 2';
+              
+                update tabExhibit;
+                system.debug('exhitab query'+tabExhibit);
+            }
+            
+            
+        
+        
+        
+       /* EMR_Exhibit_Tabluar_Input__c createdTabRec = [SELECT Id,EMR_Generating_unit_fuel_type_s__c,EMR_Fosil_Ful_Emissions_in_gCO2_per_kWhe__c, name FROM EMR_Exhibit_Tabluar_Input__c
+                                                      WHERE EMR_Exhibit_Repository__r.EMR_Exhibit_Title__c = 'Exhibit-ZAchild' ];
+        
+            
+                delete createdTabRec;*/
+        
+       // system.debug('tabrecr2'+createdTabRec);
+        Test.startTest();
+        string reuslt = EMR_ExhibitZA.createExhibitTabluarInput(exhibitTabluarWrapperLst, null, exhibitZA.Id);
+        Test.stopTest();
+        // System.assertEquals('No Success', result, 'Record should not be created successfully');
+       // system.assertEquals('Crude Oil', createdTabRec.EMR_Generating_unit_fuel_type_s__c, 'Record should be create');
+    }
+    
+    private class ExhibitTabluarInputWrapper {
+        public String descriptionOfCmu;
+        public String commercialProductionStartDate ;
+        public String generatingUnitFuelType ;
+        public String fossilemisssion ;
+        public String yearlyFossilemission ;
+        public String determineFossilemission ;
+        public String designefficncy ;
+        public String cmuCompId ;
+        public String exhibitId ;
+        public String tabularId ;
+        public String componentName ;
+        
+    }
+    
+     @isTest
+    static void testCreateExhibitTabluarInput12() {
+        // Create test data for Exhibit and CMU_Component__c
+        EMR_Exhibit__c exhibit = new EMR_Exhibit__c(EMR_Exhibit_Title__c = 'Test Exhibit');
+        insert exhibit;
+
+        EMR_CMU_Component__c cmuComponent = new EMR_CMU_Component__c(EMR_Component_ID__c = '12345');
+        insert cmuComponent;
+         String cmuComponent1 ='1233';
+        // Create test data for the wrapper list
+        List<ExhibitTabluarInputWrapper> wrapperList = new List<ExhibitTabluarInputWrapper>();
+        ExhibitTabluarInputWrapper wrapper = new ExhibitTabluarInputWrapper();
+        wrapper.exhibitId = exhibit.Id;
+        wrapper.cmuCompId = cmuComponent.Id;
+        wrapper.fossilemisssion = '100';
+        // Set other properties of the wrapper as needed
+        wrapperList.add(wrapper);
+        
+        List<String> exhibitTabluarWrapperLst = new List<String>();
+        exhibitTabluarWrapperLst.add(JSON.serialize(wrapperList));
+
+        // Call the method with the test data
+        Test.startTest();
+        String result = EMR_ExhibitZA.createExhibitTabluarInput(exhibitTabluarWrapperLst, cmuComponent1, exhibit.Id);
+        Test.stopTest();
+
+        // Perform assertions to validate the results
+        System.assertEquals('Success', result, 'The method should return Success.');
+
+        // Query the database to verify if the records were created or updated
+        List<EMR_Exhibit_Tabluar_Input__c> exhibitTabularInputs = [SELECT Id, EMR_CMU_Component__c, EMR_Exhibit_Repository__c FROM EMR_Exhibit_Tabluar_Input__c];
+        System.assertEquals(1, exhibitTabularInputs.size(), 'One record should have been created/upserted.');
+
+        
+    }
+   
