@@ -1,3 +1,118 @@
+Subscription search :
+
+{
+    "subscriptionDetails": [
+        {
+            "subscriptionId": "81004786",
+            "clientId": "70700",
+            "authMethodCd": "ON",
+            "authStatusCd": "PG",
+            "authStartDt": "2026-09-02T09:48:23",
+            "authEndDt": "2026-09-10T05:16:20",
+            "scopeList": [
+                "BA",
+                "BI",
+                "AC",
+                "UI",
+                "PE",
+                "DI",
+                "BA",
+                "BI",
+                "AC",
+                "UI",
+                "PE",
+                "DI"
+            ],
+            "resourceOwnerId": 19898,
+            "customerEmail": "ssnatest1@pge.com",
+            "createdBy": "005hG000008m9Z3QAI",
+            "updatedBy": "MULE_USER",
+            "authAccountDetails": [
+                {
+                    "acctId": "0335038438",
+                    "acctUuid": "7785515715",
+                    "acctName": "LIU,YEN CHUN",
+                    "isAuthorized": "N",
+                    "createdBy": "005hG000008m9Z3QAI",
+                    "updatedBy": "MULE_USER",
+                    "authSADetails": [
+                        {
+                            "saUuid": "7711720385",
+                            "saId": "0335038006",
+                            "isAuthorized": "Y",
+                            "commodity": "E",
+                            "startDate": "2026-09-02T09:48:23",
+                            "endDate": "2026-09-09T01:00:15",
+                            "createdBy": "005hG000008m9Z3QAI",
+                            "lastUpdatedBy": "MULE_USER"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+
+
+UUID search :
+{
+    "subscriptionDetails": [
+        {
+            "subscriptionId": "125634",
+            "clientId": "21572",
+            "authMethodCd": "ON",
+            "authStatusCd": "PG",
+            "authStartDt": "2026-09-07T07:39:19",
+            "authEndDt": "2029-09-07T23:59:59",
+            "scopeList": [
+                "BA",
+                "BI",
+                "AC",
+                "UI",
+                "PE",
+                "EE"
+            ],
+            "resourceOwnerId": 138,
+            "customerEmail": "smd_dmd_migration+7smd2@pge.com",
+            "createdBy": "005Dw000008d8nnIAA",
+            "updatedBy": "MULE_USER"
+        },
+        {
+            "subscriptionId": "122858",
+            "clientId": "21572",
+            "authMethodCd": "ON",
+            "authStatusCd": "CD",
+            "authStartDt": "2026-08-21T02:13:11",
+            "authEndDt": "2026-09-07T07:39:20",
+            "scopeList": [
+                "BA",
+                "BI",
+                "AC",
+                "UI",
+                "PE",
+                "EE"
+            ],
+            "resourceOwnerId": 138,
+            "customerEmail": "smd_dmd_migration+7smd2@pge.com",
+            "createdBy": "005Dw000008d8nnIAA",
+            "updatedBy": "005Dw000008d8nnIAA"
+        }
+    ]
+}
+NO data :
+
+{
+    "severity": "error",
+    "errorType": "Technical",
+    "timestamp": "2026-09-10T12:33:24.597",
+    "errors": [
+        {
+            "code": 404,
+            "reason": "DATA:NOT_FOUND",
+            "message": "Not Found: No subscription with accounts data was found"
+        }
+    ]
+}
 /**
  * @description       : Apex Controller to search for authorization based on SA UUID or Subscription ID.
  * Apex Class Name    :  SMD_SearchAuthorizationController
